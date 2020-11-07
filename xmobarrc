@@ -1,0 +1,31 @@
+Config { font    = "xft:Cascadia Code:pixelsize=13:antialias=true:hinting=true"
+    , bgColor = "#000000"
+    , fgColor = "#00ff00"
+    , alpha = 250
+    , position = Top
+    , lowerOnStart = True
+    , hideOnStart = False
+    , allDesktops = True
+    , persistent = True
+    , commands = [ Run Date "%a, %b %d %Y, %H:%M" "date" 10
+        , Run DynNetwork     [ "--template" , "<dev>: Up <tx>kB/s - Down <rx>kB/s"
+                             , "--Low"      , "100000"     -- units: B/s
+                             , "--High"     , "1000000"    -- units: B/s
+                             , "--low"      , "#00ff00"
+                             , "--normal"   , "#00ff00"
+                             , "--high"     , "#00ff00"
+                             ] 10
+                             
+        , Run Cpu ["-t", "Cpu: <total>%","-H","50","--high","red"] 10
+        , Run Memory ["-t", "Mem: <usedratio>%"] 10
+        , Run Swap [] 10
+        , Run UnsafeStdinReader
+        , Run Battery ["-L","50","-H","75","--high","#50fa7b","--normal","#bd93f9", "--low", "#ff5555"] 50
+        ]
+    , sepChar = "%"
+    , alignSep = "}{"
+    , template = " %UnsafeStdinReader% }{ %cpu% ~ %memory% ~ %swap% ~ %dynnetwork% ~ %battery% ~ <fc=#50fa7b>%date%</fc> "
+    }
+
+
+-- exford blue #00ff00
