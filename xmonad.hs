@@ -22,10 +22,10 @@ myModMask     = mod4Mask -- Win key or Super_L
 myBorderWidth = 1
 
 -- color of focused border
-myFocusedBorderColor = "#ff0000"
+myFocusedBorderColor = "#ffffff"
 
 -- color of inactive border
-myNormalBorderColor = "#00ff00"
+myNormalBorderColor = "#808080"
 
 myWorkspaces =  ["1","2","3","4","5","6","7","8","9"] ++ (map snd myExtraWorkspaces)
 
@@ -39,8 +39,8 @@ myExtraWorkspaces = [(xK_0, "term")] -- list of (key, name)
 myBar = "xmobar"
 --
 -- -- Custom PP, configure it as you like. It determines what is being written to the bar.
-myPP = xmobarPP { ppTitle = xmobarColor "#00ff00" "" . shorten 50,
-                  ppCurrent = xmobarColor "#00ff00" "" . wrap "<" ">" }
+myPP = xmobarPP { ppTitle = xmobarColor "#ffffff" "" . shorten 50,
+                  ppCurrent = xmobarColor "#ffffff" "" . wrap "<" ">" }
 --
 -- -- Key binding to toggle the gap for the bar.
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
@@ -51,8 +51,10 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 shortcuts = [
         ("M-<Return>", spawn myTerminal),
-        ("M-p", spawn "dmenu_run -fn 'Cascadia Code:pixelsize=13' -nb '#000000' -sf '#000000' -sb '#00ff00' -nf '#00ff00'"),
-        ("M-w", spawn "google-chrome-stable --force-dark-mode")
+        ("M-p", spawn "dmenu_run -fn 'Cascadia Code:pixelsize=13' -nb '#000000' -sf '#000000' -sb '#ffffff' -nf '#ffffff'"),
+        ("M-w", spawn "google-chrome-stable --force-dark-mode"),
+	("M-d", spawn "discord"),
+	("M-c", spawn "code")
       ]
 
 --------------------------------------------------------------------
@@ -61,7 +63,9 @@ shortcuts = [
 
 myManageHook :: ManageHook 
 myManageHook = composeAll . concat $ [ [isDialog -->  doCenterFloat] ]
- 
+myStartupHook = do
+	spawnOnce "nitrogen --restore &"
+	spawnOnce "compton &" 
 --------------------------------------------------------------------
 -------------- Main Function
 --------------------------------------------------------------------
@@ -75,6 +79,7 @@ myConfig = defaultConfig
       , focusedBorderColor = myFocusedBorderColor
       , normalBorderColor = myNormalBorderColor
       , workspaces = myWorkspaces
+      , startupHook = myStartupHook
       , layoutHook = smartSpacing 10 $ smartBorders $ layoutHook defaultConfig
       , manageHook = manageHook defaultConfig <+> myManageHook
       }`additionalKeysP`
